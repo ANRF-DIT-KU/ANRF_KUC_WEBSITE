@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
 export const Footer: React.FC = () => {
   return (
@@ -14,11 +14,16 @@ export const Footer: React.FC = () => {
             <div className="text-slate-400 text-sm space-y-1">
               <p>Thavakkara, Civil Station P.O.</p>
               <p>Kannur, Kerala 670002, India</p>
-              <p className="pt-1 text-slate-300">
-                <span className="text-slate-400">Email:</span> pair-hub@kannuruniv.ac.in
-              </p>
+              <a
+                href="mailto:anrfpair@kannuruniv.ac.in"
+                className="pt-1 text-slate-300"
+              >
+                <span className="text-slate-400">Email:</span>{" "}
+                anrfpair@kannuruniv.ac.in
+              </a>
               <p className="text-slate-300">
-                <span className="text-slate-400">Tel:</span> +91 497 2715185 / 2715200
+                <span className="text-slate-400">Tel:</span> +91 497 2715185 /
+                2715200
               </p>
             </div>
           </div>
@@ -29,15 +34,28 @@ export const Footer: React.FC = () => {
               Quick links
             </h3>
             <div className="text-slate-300 text-sm flex flex-wrap items-center gap-x-2 gap-y-1">
-              <Link to="/about" className="hover:text-amber-300 transition">About</Link>
+              <Link to="/about" className="hover:text-amber-300 transition">
+                About
+              </Link>
               <span className="text-slate-600">·</span>
-              <Link to="/departments" className="hover:text-amber-300 transition">Departments</Link>
+              <Link
+                to="/departments"
+                className="hover:text-amber-300 transition"
+              >
+                Departments
+              </Link>
               <span className="text-slate-600">·</span>
-              <Link to="/bulletins" className="hover:text-amber-300 transition">Bulletins</Link>
+              <Link to="/bulletins" className="hover:text-amber-300 transition">
+                Bulletins
+              </Link>
               <span className="text-slate-600">·</span>
-              <Link to="/team" className="hover:text-amber-300 transition">Team</Link>
+              <Link to="/team" className="hover:text-amber-300 transition">
+                Team
+              </Link>
               <span className="text-slate-600">·</span>
-              <Link to="/contact" className="hover:text-amber-300 transition">Contact</Link>
+              <Link to="/contact" className="hover:text-amber-300 transition">
+                Contact
+              </Link>
             </div>
           </div>
 
@@ -70,7 +88,10 @@ export const Footer: React.FC = () => {
 
         {/* Sub-footer copyright */}
         <div className="pt-6 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-400 gap-4">
-          <p>© {new Date().getFullYear()} Kannur University ANRF-PAIR Spoke. All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} Kannur University ANRF-PAIR Spoke. All
+            rights reserved.
+          </p>
           <p className="text-slate-400 text-xs">
             Partnerships for Accelerated Innovation and Research (PAIR) Scheme
           </p>
@@ -79,5 +100,3 @@ export const Footer: React.FC = () => {
     </footer>
   );
 };
-
-

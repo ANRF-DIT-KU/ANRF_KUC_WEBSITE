@@ -1,32 +1,25 @@
-import React from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { Department } from '../types';
-import { ArrowLeft, User, BookOpen, Activity } from 'lucide-react';
+import React from "react";
+import { useParams } from "react-router-dom";
+import { Department } from "../types";
+import { PageContainer } from "../components/common/PageContainer";
+import { BackLink } from "../components/common/BackLink";
+import { User, BookOpen, Activity } from "lucide-react";
 
 interface DepartmentDetailPageProps {
   departments: Department[];
 }
 
-export const DepartmentDetailPage: React.FC<DepartmentDetailPageProps> = ({ departments }) => {
+export const DepartmentDetailPage: React.FC<DepartmentDetailPageProps> = ({
+  departments,
+}) => {
   const { id } = useParams<{ id: string }>();
   const department = departments.find((d) => d.id === id) || departments[0];
 
   return (
-    <div className="py-12 px-4 sm:px-8 max-w-7xl mx-auto">
-      <div className="mb-6">
-        <Link
-          to="/departments"
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0f766e] hover:text-[#0b2344] transition"
-        >
-          <ArrowLeft size={16} />
-          <span>Back to All Departments</span>
-        </Link>
-      </div>
+    <PageContainer>
+      <BackLink to="/departments" label="Back to All Departments" />
 
       <div className="bg-white border border-slate-200 rounded-lg p-8 sm:p-10 shadow-xs mb-8">
-        <span className="text-[#0f766e] text-xs font-bold tracking-wider uppercase font-sans">
-          {department.label}
-        </span>
         <h1 className="text-3xl sm:text-4xl font-bold text-[#0b2344] font-display mt-2 mb-4">
           {department.name}
         </h1>
@@ -42,7 +35,7 @@ export const DepartmentDetailPage: React.FC<DepartmentDetailPageProps> = ({ depa
                 Lead Investigator
               </div>
               <div className="text-sm font-bold text-slate-800 mt-0.5">
-                {department.leadInvestigator || 'Senior Faculty PI'}
+                {department.leadInvestigator || "Senior Faculty PI"}
               </div>
             </div>
           </div>
@@ -54,7 +47,7 @@ export const DepartmentDetailPage: React.FC<DepartmentDetailPageProps> = ({ depa
                 Disease Focus
               </div>
               <div className="text-sm font-bold text-slate-800 mt-0.5">
-                {department.diseaseArea || 'Translational Health'}
+                {department.diseaseArea || "Translational Health"}
               </div>
             </div>
           </div>
@@ -83,6 +76,6 @@ export const DepartmentDetailPage: React.FC<DepartmentDetailPageProps> = ({ depa
           </div>
         )}
       </div>
-    </div>
+    </PageContainer>
   );
 };

@@ -15,8 +15,6 @@ export const SocialUpdatesSection: React.FC<SocialUpdatesSectionProps> = ({
       url: "https://www.facebook.com/profile.php?id=61595953122898",
     },
     { name: "Instagram", url: "https://www.instagram.com/anrfkuc/" },
-    // { name: "X", url: "https://x.com" },
-    // { name: "LinkedIn", url: "https://linkedin.com" },
     { name: "YouTube", url: "https://www.youtube.com/@ANRFKUC" },
   ];
 

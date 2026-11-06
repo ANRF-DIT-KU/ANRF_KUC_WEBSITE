@@ -1,6 +1,6 @@
 import React from 'react';
 import { Department } from '../../types';
-import { User, Activity } from 'lucide-react';
+import { DepartmentCard } from '../departments/DepartmentCard';
 
 interface DepartmentsSectionProps {
   departments: Department[];
@@ -23,39 +23,7 @@ export const DepartmentsSection: React.FC<DepartmentsSectionProps> = ({ departme
         {/* 3x2 Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {departments.map((dept) => (
-            <div
-              key={dept.id}
-              className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs flex flex-col justify-between"
-            >
-              <div>
-                <span className="text-[#0f766e] text-xs font-bold tracking-wider uppercase font-sans">
-                  {dept.label}
-                </span>
-
-                <h3 className="text-lg font-bold text-slate-900 mt-2 mb-3 font-display">
-                  {dept.name}
-                </h3>
-
-                <div className="space-y-2 mb-4">
-                  <div className="flex items-start gap-2 text-xs text-slate-700">
-                    <User size={15} className="text-[#0f766e] shrink-0 mt-0.5" />
-                    <span className="font-semibold">{dept.leadInvestigator}</span>
-                  </div>
-                  {dept.diseaseArea && (
-                    <div className="flex items-start gap-2 text-xs text-slate-600">
-                      <Activity size={15} className="text-slate-400 shrink-0 mt-0.5" />
-                      <span>Domain: {dept.diseaseArea}</span>
-                    </div>
-                  )}
-                </div>
-
-                {dept.description && (
-                  <p className="text-xs text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
-                    {dept.description}
-                  </p>
-                )}
-              </div>
-            </div>
+            <DepartmentCard key={dept.id} department={dept} />
           ))}
         </div>
       </div>

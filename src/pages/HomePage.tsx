@@ -1,11 +1,17 @@
-import React from 'react';
-import { HeroSection } from '../components/home/HeroSection';
-import { LatestUpdatesTicker } from '../components/home/LatestUpdatesTicker';
-import { DepartmentsSection } from '../components/home/DepartmentsSection';
-import { BulletinsSection } from '../components/home/BulletinsSection';
-import { PresentationsSection } from '../components/home/PresentationsSection';
-import { SocialUpdatesSection } from '../components/home/SocialUpdatesSection';
-import { Department, Bulletin, Presentation, SocialPost, Announcement } from '../types';
+import React from "react";
+import { HeroSection } from "../components/home/HeroSection";
+import { LatestUpdatesTicker } from "../components/home/LatestUpdatesTicker";
+import { DepartmentsSection } from "../components/home/DepartmentsSection";
+import { BulletinsSection } from "../components/home/BulletinsSection";
+import { PresentationsSection } from "../components/home/PresentationsSection";
+import { SocialUpdatesSection } from "../components/home/SocialUpdatesSection";
+import {
+  Department,
+  Bulletin,
+  Presentation,
+  SocialPost,
+  Announcement,
+} from "../types";
 
 interface HomePageProps {
   announcements: Announcement[];
@@ -22,23 +28,15 @@ export const HomePage: React.FC<HomePageProps> = ({
   presentations,
   socialPosts,
 }) => {
-  const scrollToPresentations = () => {
-    const el = document.getElementById('presentations');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  };
-
   const scrollToBulletins = () => {
-    const el = document.getElementById('bulletins');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    const el = document.getElementById("bulletins");
+    if (el) el.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <main className="min-h-screen flex flex-col">
       {/* 1. Hero Section */}
-      <HeroSection
-        onScrollToPresentations={scrollToPresentations}
-        onScrollToBulletins={scrollToBulletins}
-      />
+      <HeroSection onScrollToBulletins={scrollToBulletins} />
 
       {/* 2. Latest Updates Announcement Ticker */}
       <LatestUpdatesTicker announcements={announcements} />
@@ -60,4 +58,3 @@ export const HomePage: React.FC<HomePageProps> = ({
     </main>
   );
 };
-

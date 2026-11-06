@@ -1,19 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { PageContainer } from '../components/common/PageContainer';
+import { BackLink } from '../components/common/BackLink';
 
 export const AboutPage: React.FC = () => {
   return (
-    <div className="py-12 px-4 sm:px-8 max-w-7xl mx-auto">
-      <div className="mb-6">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0f766e] hover:text-[#0b2344] transition"
-        >
-          <ArrowLeft size={16} />
-          <span>Back to Home</span>
-        </Link>
-      </div>
+    <PageContainer>
+      <BackLink to="/" label="Back to Home" />
 
       <div className="bg-white border border-slate-200 rounded-lg p-8 sm:p-12 shadow-xs">
         <div className="text-xs font-semibold text-[#e5a83b] uppercase tracking-wider mb-2 font-sans">
@@ -76,6 +68,6 @@ export const AboutPage: React.FC = () => {
           </p>
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 };

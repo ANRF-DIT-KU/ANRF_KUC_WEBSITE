@@ -1,12 +1,10 @@
 export interface Department {
   id: string;
-  number: number;
-  label: string;
   name: string;
   focusArea: string;
   description?: string;
   leadInvestigator?: string;
-  diseaseArea?: "Metabolic Diseases" | "Infectious Diseases" | "Cancers";
+  diseaseArea?: string;
   outputsCount?: number;
 }
 

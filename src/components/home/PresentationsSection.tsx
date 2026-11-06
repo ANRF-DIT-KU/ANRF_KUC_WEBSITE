@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Presentation, Department } from '../../types';
-import { CheckCircle2 } from 'lucide-react';
+import React, { useState } from "react";
+import { Presentation, Department } from "../../types";
+import { CheckCircle2 } from "lucide-react";
 
 interface PresentationsSectionProps {
   presentations: Presentation[];
@@ -11,8 +11,8 @@ export const PresentationsSection: React.FC<PresentationsSectionProps> = ({
   presentations,
   departments,
 }) => {
-  const [selectedDept, setSelectedDept] = useState('');
-  const [title, setTitle] = useState('');
+  const [selectedDept, setSelectedDept] = useState("");
+  const [title, setTitle] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -20,21 +20,24 @@ export const PresentationsSection: React.FC<PresentationsSectionProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedDept || !title) {
-      alert('Please select a department and enter a presentation title.');
+      alert("Please select a department and enter a presentation title.");
       return;
     }
     setSubmitting(true);
     setTimeout(() => {
       setSubmitting(false);
       setSubmitted(true);
-      setSelectedDept('');
-      setTitle('');
+      setSelectedDept("");
+      setTitle("");
       setFile(null);
     }, 800);
   };
 
   return (
-    <section className="py-16 px-4 sm:px-8 bg-white border-t border-slate-200" id="presentations">
+    <section
+      className="py-16 px-4 sm:px-8 bg-white border-t border-slate-200"
+      id="presentations"
+    >
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
           {/* Left Column: Presentations List */}
@@ -60,7 +63,10 @@ export const PresentationsSection: React.FC<PresentationsSectionProps> = ({
 
                   {item.speaker && (
                     <p className="text-xs text-slate-500 mt-1">
-                      Presented by: <span className="text-slate-700 font-medium">{item.speaker}</span>
+                      Presented by:{" "}
+                      <span className="text-slate-700 font-medium">
+                        {item.speaker}
+                      </span>
                     </p>
                   )}
                 </div>
@@ -82,7 +88,8 @@ export const PresentationsSection: React.FC<PresentationsSectionProps> = ({
                     Presentation Submitted!
                   </h4>
                   <p className="text-xs text-slate-600">
-                    Your presentation file has been successfully uploaded for academic review by the ANRF-PAIR editorial team.
+                    Your presentation file has been successfully uploaded for
+                    academic review by the ANRF-PAIR editorial team.
                   </p>
                   <button
                     onClick={() => setSubmitted(false)}
@@ -107,7 +114,7 @@ export const PresentationsSection: React.FC<PresentationsSectionProps> = ({
                       <option value="">Select department</option>
                       {departments.map((d) => (
                         <option key={d.id} value={d.id}>
-                          {d.label}: {d.name}
+                          {d.name}
                         </option>
                       ))}
                     </select>
@@ -148,7 +155,7 @@ export const PresentationsSection: React.FC<PresentationsSectionProps> = ({
                         />
                       </label>
                       <span className="flex-1 px-3 py-2 border-y border-r border-slate-300 rounded-r-md text-xs text-slate-500 bg-white truncate">
-                        {file ? file.name : 'No file chosen'}
+                        {file ? file.name : "No file chosen"}
                       </span>
                     </div>
                   </div>

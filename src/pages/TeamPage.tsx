@@ -1,6 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { ArrowLeft, Mail, UserCheck, Users } from "lucide-react";
+import { Mail, UserCheck, Users } from "lucide-react";
+import { PageContainer } from "../components/common/PageContainer";
+import { PageHeader } from "../components/common/PageHeader";
+import { BackLink } from "../components/common/BackLink";
 
 interface ProjectGroup {
   id: string;
@@ -10,6 +12,10 @@ interface ProjectGroup {
     role: string;
     affiliation: string;
   };
+  coInvestigators?: {
+    name: string;
+    role?: string;
+  }[];
   members: {
     name: string;
     role: string;
@@ -37,13 +43,46 @@ export const TeamPage: React.FC = () => {
       ],
     },
     {
+      id: "health-surveillance",
+      projectTitle:
+        "Interactive Citizen Driven Health Information System and Social wellbeing Frame work for Early Disease Surveillance, Healthcare and Health Promotion- Pilot study in Kerala",
+      pi: {
+        name: "Prof. Anil Ramachandran",
+        role: "Project Investigator",
+        affiliation: "ANRF PAIR, Kannur University",
+      },
+      coInvestigators: [
+        { name: "Dr. Shijila P S" },
+        { name: "Dr. Johnson Alex" },
+        { name: "Dr. Seetha Kakkoth" },
+        { name: "Prof. N S Sreekanth" },
+      ],
+      members: [
+        {
+          name: "Sravan Sasikumar",
+          role: "Project Associate",
+          email: "sravanunni5@gmail.com",
+        },
+        {
+          name: "Jyothi N",
+          role: "Technical Assistant",
+          email: "nssjyothi@gmail.com",
+        },
+      ],
+    },
+    {
       id: "blood-profiling",
       projectTitle: "Non-Invasive Blood Parameter Profiling",
       pi: {
-        name: "Prof. Sreekanth N S",
-        role: "Co-Investigator",
+        name: "Prof. N S Sreekanth",
+        role: "Project Investigator",
         affiliation: "ANRF PAIR, Kannur University",
       },
+      coInvestigators: [
+        { name: "Prof. Anup Kumar Kesavan" },
+        { name: "Dr. Baiju K V" },
+        { name: "Dr. Soorej M Basheer" },
+      ],
       members: [
         {
           name: "Ms. Sreya C",
@@ -67,16 +106,16 @@ export const TeamPage: React.FC = () => {
         },
       ],
     },
-
     {
       id: "water-treatment",
       projectTitle:
         "Development of solar light driven g-C3N4 based photocatalytic system and fabrication of CPC photoreactor for Hospital waste water treatment",
       pi: {
         name: "Dr. Baiju K V",
-        role: "Co-Investigator",
+        role: "Project Investigator",
         affiliation: "ANRF PAIR, Kannur University",
       },
+      coInvestigators: [{ name: "Dr. Soorej M Basheer" }],
       members: [
         {
           name: "Mr. Akshay P K",
@@ -101,9 +140,15 @@ export const TeamPage: React.FC = () => {
         "Exploring novel bioactive compounds from marine microbes and their Antimicrobial, Antiviral, and Anticancer Properties",
       pi: {
         name: "Dr. Soorej M Basheer",
-        role: "Co-Investigator",
+        role: "Project Investigator",
         affiliation: "ANRF PAIR, Kannur University",
       },
+      coInvestigators: [
+        { name: "Dr. Arun Kumar" },
+        { name: "Dr. Anupama K P" },
+        { name: "Dr. Sreeja Chellappan" },
+        { name: "Prof. Sabu A" },
+      ],
       members: [
         {
           name: "Ms. Tiya Mathai",
@@ -122,34 +167,13 @@ export const TeamPage: React.FC = () => {
         },
       ],
     },
-    {
-      id: "health-surveillance",
-      projectTitle:
-        "Interactive Citizen Driven Health Information System and Social wellbeing Frame work for Early Disease Surveillance, Healthcare and Health Promotion- Pilot study in Kerala",
-      pi: {
-        name: "Prof. Anil Ramachandran",
-        role: "Co-Investigator",
-        affiliation: "ANRF PAIR, Kannur University",
-      },
-      members: [
-        {
-          name: "Sravan Sasikumar",
-          role: "Project Associate",
-          email: "sravanunni5@gmail.com",
-        },
-        {
-          name: "Jyothi N",
-          role: "Technical Assistant",
-          email: "nssjyothi@gmail.com",
-        },
-      ],
-    },
+
     {
       id: "vector-dynamics",
       projectTitle: "Vector Dynamics and Hotspot Mapping for Dengue/Malaria",
       pi: {
         name: "Dr. Joseph Erinjery",
-        role: "Co-Investigator",
+        role: "Project Investigator",
         affiliation: "ANRF PAIR, Kannur University",
       },
       members: [
@@ -168,23 +192,11 @@ export const TeamPage: React.FC = () => {
   ];
 
   return (
-    <div className="py-12 px-4 sm:px-8 max-w-6xl mx-auto">
-      <div className="mb-6">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0f766e] hover:text-[#0b2344] transition"
-        >
-          <ArrowLeft size={16} />
-          <span>Back to Home</span>
-        </Link>
-      </div>
+    <PageContainer>
+      <BackLink to="/" label="Back to Home" />
 
       {/* Header */}
-      <div className="mb-10">
-        <h1 className="text-3xl sm:text-4xl font-bold text-[#0b2344] font-display">
-          Our Team
-        </h1>
-      </div>
+      <PageHeader title="Our Team" />
 
       <div className="space-y-8">
         {projectGroups.map((group) => (
@@ -199,6 +211,7 @@ export const TeamPage: React.FC = () => {
             </div>
 
             <div className="p-6">
+              {/* Investigator (PI / Lead) Card */}
               <div className="mb-6 bg-teal-50/50 border border-teal-100 rounded-lg p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-[#0b2344] text-white flex items-center justify-center font-bold text-sm shrink-0">
@@ -209,7 +222,13 @@ export const TeamPage: React.FC = () => {
                       <span className="font-bold text-slate-900 text-base">
                         {group.pi.name}
                       </span>
-                      <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-teal-100 text-[#0f766e]">
+                      <span
+                        className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${
+                          group.pi.role === "Principal Investigator"
+                            ? "bg-amber-100 text-amber-900 border border-amber-200"
+                            : "bg-teal-100 text-[#0f766e]"
+                        }`}
+                      >
                         {group.pi.role}
                       </span>
                     </div>
@@ -220,6 +239,32 @@ export const TeamPage: React.FC = () => {
                 </div>
               </div>
 
+              {/* Co-Investigators (Co-PIs) if present */}
+              {group.coInvestigators && group.coInvestigators.length > 0 && (
+                <div className="mb-6">
+                  <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5">
+                    <UserCheck size={14} className="text-[#0f766e]" />
+                    <span>Co-Investigators</span>
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                    {group.coInvestigators.map((coPi, idx) => (
+                      <div
+                        key={idx}
+                        className="border border-slate-200 bg-slate-50/80 rounded-lg p-3 hover:bg-white hover:border-slate-300 transition flex items-center justify-between gap-2"
+                      >
+                        <div className="font-semibold text-slate-800 text-sm">
+                          {coPi.name}
+                        </div>
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 whitespace-nowrap">
+                          Co-PI
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Project Members / Staff */}
               <div>
                 <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5">
                   <Users size={14} />
@@ -253,6 +298,6 @@ export const TeamPage: React.FC = () => {
           </div>
         ))}
       </div>
-    </div>
+    </PageContainer>
   );
 };

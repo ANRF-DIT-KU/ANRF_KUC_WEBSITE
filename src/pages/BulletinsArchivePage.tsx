@@ -1,6 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft, Download, FileText } from 'lucide-react';
+import { PageContainer } from '../components/common/PageContainer';
+import { PageHeader } from '../components/common/PageHeader';
+import { BackLink } from '../components/common/BackLink';
+import { Download, FileText } from 'lucide-react';
 
 export const BulletinsArchivePage: React.FC = () => {
   const archiveItems = [
@@ -13,25 +15,10 @@ export const BulletinsArchivePage: React.FC = () => {
   ];
 
   return (
-    <div className="py-12 px-4 sm:px-8 max-w-7xl mx-auto">
-      <div className="mb-6">
-        <Link
-          to="/bulletins"
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0f766e] hover:text-[#0b2344] transition"
-        >
-          <ArrowLeft size={16} />
-          <span>Back to Bulletins</span>
-        </Link>
-      </div>
+    <PageContainer>
+      <BackLink to="/bulletins" label="Back to Bulletins" />
 
-      <div className="mb-10">
-        <h1 className="text-3xl sm:text-4xl font-bold text-[#0b2344] font-display">
-          Bulletin Archive
-        </h1>
-        <p className="text-slate-600 text-sm sm:text-base mt-2">
-          Complete archive of published research bulletins, technical monographs, and PAIR progress reports.
-        </p>
-      </div>
+      <PageHeader title="Bulletin Archive" />
 
       <div className="bg-white border border-slate-200 rounded-lg divide-y divide-slate-200 shadow-xs">
         {archiveItems.map((item, idx) => (
@@ -59,7 +46,7 @@ export const BulletinsArchivePage: React.FC = () => {
           </div>
         ))}
       </div>
-    </div>
+    </PageContainer>
   );
 };
 

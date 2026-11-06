@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft, Mail, Phone, MapPin, Send, CheckCircle2 } from 'lucide-react';
+import { PageContainer } from '../components/common/PageContainer';
+import { PageHeader } from '../components/common/PageHeader';
+import { BackLink } from '../components/common/BackLink';
+import { Mail, Phone, MapPin, Send, CheckCircle2 } from 'lucide-react';
 
 export const ContactPage: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
@@ -12,25 +14,10 @@ export const ContactPage: React.FC = () => {
   };
 
   return (
-    <div className="py-12 px-4 sm:px-8 max-w-7xl mx-auto">
-      <div className="mb-6">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0f766e] hover:text-[#0b2344] transition"
-        >
-          <ArrowLeft size={16} />
-          <span>Back to Home</span>
-        </Link>
-      </div>
+    <PageContainer>
+      <BackLink to="/" label="Back to Home" />
 
-      <div className="mb-10">
-        <h1 className="text-3xl sm:text-4xl font-bold text-[#0b2344] font-display">
-          Contact Us
-        </h1>
-        <p className="text-slate-600 text-sm sm:text-base mt-2">
-          Connect with the Kannur University ANRF-PAIR Project Directorate and research personnel.
-        </p>
-      </div>
+      <PageHeader title="Contact Us" />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         {/* Contact Info */}
@@ -172,7 +159,7 @@ export const ContactPage: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 };
 

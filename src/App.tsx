@@ -18,15 +18,15 @@ import { BulletinsArchivePage } from "./pages/BulletinsArchivePage";
 import {
   mockBulletins,
   mockSocialPosts,
-  mockDepartments,
   mockPresentations,
   mockAnnouncements,
 } from "./data/mockData";
+import { departmentsData } from "./data/departmentsData";
 
 export const App: React.FC = () => {
   // Use actual filled data directly
   const announcements = mockAnnouncements.filled;
-  const departments = mockDepartments.filled;
+  const departments = departmentsData;
   const bulletins = mockBulletins.filled;
   const presentations = mockPresentations.filled;
   const socialPosts = mockSocialPosts.filled;

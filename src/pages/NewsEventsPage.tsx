@@ -1,6 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft, Calendar, MapPin } from 'lucide-react';
+import { PageContainer } from '../components/common/PageContainer';
+import { PageHeader } from '../components/common/PageHeader';
+import { BackLink } from '../components/common/BackLink';
+import { Calendar, MapPin } from 'lucide-react';
 
 export const NewsEventsPage: React.FC = () => {
   const events = [
@@ -31,25 +33,10 @@ export const NewsEventsPage: React.FC = () => {
   ];
 
   return (
-    <div className="py-12 px-4 sm:px-8 max-w-7xl mx-auto">
-      <div className="mb-6">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0f766e] hover:text-[#0b2344] transition"
-        >
-          <ArrowLeft size={16} />
-          <span>Back to Home</span>
-        </Link>
-      </div>
+    <PageContainer>
+      <BackLink to="/" label="Back to Home" />
 
-      <div className="mb-10">
-        <h1 className="text-3xl sm:text-4xl font-bold text-[#0b2344] font-display">
-          News & Events
-        </h1>
-        <p className="text-slate-600 text-sm sm:text-base mt-2">
-          Upcoming academic conferences, workshops, webinars, and milestone announcements.
-        </p>
-      </div>
+      <PageHeader title="News & Events" />
 
       <div className="space-y-6">
         {events.map((event) => (
@@ -84,6 +71,6 @@ export const NewsEventsPage: React.FC = () => {
           </div>
         ))}
       </div>
-    </div>
+    </PageContainer>
   );
 };
