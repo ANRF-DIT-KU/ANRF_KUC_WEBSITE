@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
-import { PageContainer } from '../components/common/PageContainer';
-import { PageHeader } from '../components/common/PageHeader';
-import { BackLink } from '../components/common/BackLink';
-import { Mail, Phone, MapPin, Send, CheckCircle2 } from 'lucide-react';
+import React, { useState } from "react";
+import { PageContainer } from "../components/common/PageContainer";
+import { PageHeader } from "../components/common/PageHeader";
+import { BackLink } from "../components/common/BackLink";
+import { Mail, Phone, MapPin, Send, CheckCircle2 } from "lucide-react";
 
 export const ContactPage: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,10 +36,12 @@ export const ContactPage: React.FC = () => {
               <div className="flex items-start gap-3.5">
                 <MapPin className="text-[#0f766e] shrink-0 mt-1" size={20} />
                 <div>
-                  <div className="font-bold text-slate-900">Kannur University</div>
+                  <div className="font-bold text-slate-900">
+                    Kannur University
+                  </div>
                   <div className="text-slate-600 leading-relaxed">
-                    ANRF-PAIR Spoke Directorate<br />
-                    Thavakkara, Civil Station P.O.<br />
+                    Thavakkara, Civil Station P.O.
+                    <br />
                     Kannur, Kerala 670002, India
                   </div>
                 </div>
@@ -43,20 +50,27 @@ export const ContactPage: React.FC = () => {
               <div className="flex items-start gap-3.5">
                 <Mail className="text-[#0f766e] shrink-0 mt-1" size={20} />
                 <div>
-                  <div className="font-bold text-slate-900">Email Inquiries</div>
-                  <div className="text-slate-600">
-                    pair-hub@kannuruniv.ac.in<br />
-                    coordinator.pair@kannuruniv.ac.in
+                  <div className="font-bold text-slate-900">
+                    Email Inquiries
                   </div>
+                  <a
+                    href="mailto:anrfpair@kannuruniv.ac.in"
+                    className="text-slate-600"
+                  >
+                    anrfpair@kannuruniv.ac.in
+                  </a>
                 </div>
               </div>
 
               <div className="flex items-start gap-3.5">
                 <Phone className="text-[#0f766e] shrink-0 mt-1" size={20} />
                 <div>
-                  <div className="font-bold text-slate-900">Phone & Helpline</div>
+                  <div className="font-bold text-slate-900">
+                    Phone & Helpline
+                  </div>
                   <div className="text-slate-600">
-                    +91 497 2715185 / 2715200<br />
+                    +91 497 2715185 / 2715200
+                    <br />
                     Monday – Friday, 9:30 AM – 5:00 PM IST
                   </div>
                 </div>
@@ -79,7 +93,8 @@ export const ContactPage: React.FC = () => {
                   Message Transmitted
                 </h3>
                 <p className="text-sm text-slate-600">
-                  Thank you for reaching out. A coordinator from the ANRF-PAIR office will respond shortly.
+                  Thank you for reaching out. A coordinator from the ANRF-PAIR
+                  office will respond shortly.
                 </p>
                 <button
                   onClick={() => setSubmitted(false)}
@@ -99,7 +114,9 @@ export const ContactPage: React.FC = () => {
                       type="text"
                       required
                       value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
                       placeholder="Dr. / Mr. / Ms."
                       className="w-full px-3.5 py-2 text-sm border border-slate-300 rounded-md focus:ring-2 focus:ring-[#0b2344] focus:outline-hidden"
                     />
@@ -112,7 +129,9 @@ export const ContactPage: React.FC = () => {
                       type="email"
                       required
                       value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
                       placeholder="you@institution.edu"
                       className="w-full px-3.5 py-2 text-sm border border-slate-300 rounded-md focus:ring-2 focus:ring-[#0b2344] focus:outline-hidden"
                     />
@@ -127,7 +146,9 @@ export const ContactPage: React.FC = () => {
                     type="text"
                     required
                     value={formData.subject}
-                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, subject: e.target.value })
+                    }
                     placeholder="e.g. Research Collaboration / Facility Access"
                     className="w-full px-3.5 py-2 text-sm border border-slate-300 rounded-md focus:ring-2 focus:ring-[#0b2344] focus:outline-hidden"
                   />
@@ -141,7 +162,9 @@ export const ContactPage: React.FC = () => {
                     rows={5}
                     required
                     value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, message: e.target.value })
+                    }
                     placeholder="Write your inquiry or proposal summary here..."
                     className="w-full px-3.5 py-2 text-sm border border-slate-300 rounded-md focus:ring-2 focus:ring-[#0b2344] focus:outline-hidden"
                   />
@@ -162,4 +185,3 @@ export const ContactPage: React.FC = () => {
     </PageContainer>
   );
 };
-

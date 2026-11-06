@@ -14,6 +14,7 @@ import { DepartmentsPage } from "./pages/DepartmentsPage";
 import { PresentationsPage } from "./pages/PresentationsPage";
 import { DepartmentDetailPage } from "./pages/DepartmentDetailPage";
 import { BulletinsArchivePage } from "./pages/BulletinsArchivePage";
+import { GalleryPage } from "./pages/GalleryPage";
 
 import {
   mockBulletins,
@@ -79,6 +80,7 @@ export const App: React.FC = () => {
             />
             <Route path="/news-events" element={<NewsEventsPage />} />
             <Route path="/team" element={<TeamPage />} />
+            <Route path="/gallery" element={<GalleryPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
