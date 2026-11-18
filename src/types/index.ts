@@ -100,6 +100,7 @@ export interface GalleryItem {
 
 export interface ProjectTeam {
   projectId: string;
+  displayOrder?: number;
   projectTitle: string;
   pi: { name: string; role: string; affiliation: string };
   coInvestigators: { name: string }[];
