@@ -31,19 +31,20 @@ const formatPresentationDate = (iso: string) =>
     .toUpperCase();
 
 export const ManagePresentations: React.FC = () => {
-  const { user } = useAuth();
+  const { activeProjectId, isAdmin } = useAuth();
   const queryClient = useQueryClient();
-  const pid = user!.projectId;
+  const pid = activeProjectId;
   const department = departmentsData.find((d) => d.id === pid);
 
   const { data: mine = [] } = useQuery({
-    queryKey: ["presentations", pid],
-    queryFn: () => fetchPresentationsApi(pid),
+    queryKey: ["presentations", isAdmin ? "all" : pid],
+    queryFn: () => fetchPresentationsApi(isAdmin ? undefined : pid),
   });
 
   const { data: team } = useQuery({
     queryKey: ["team", pid],
     queryFn: () => fetchProjectTeamApi(pid),
+    enabled: pid !== "general",
   });
 
   const [title, setTitle] = useState("");

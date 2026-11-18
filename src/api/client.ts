@@ -3,8 +3,22 @@ import axios from "axios";
 export const TOKEN_STORAGE_KEY = "anrf_jwt_token";
 export const USER_STORAGE_KEY = "anrf_auth_user";
 
+export const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+
+/** Base server origin (e.g. "http://localhost:5000") for resolving /uploads/... paths */
+export const SERVER_ORIGIN = API_BASE_URL.replace(/\/api\/?$/, "");
+
+export function resolveBackendUrl(url?: string | null): string {
+  if (!url) return "";
+  if (url === "#" || url.startsWith("http://") || url.startsWith("https://") || url.startsWith("blob:") || url.startsWith("data:")) {
+    return url;
+  }
+  return `${SERVER_ORIGIN}${url.startsWith("/") ? "" : "/"}${url}`;
+}
+
 export const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api",
+  baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -29,7 +43,8 @@ apiClient.interceptors.response.use(
       localStorage.removeItem(TOKEN_STORAGE_KEY);
       localStorage.removeItem(USER_STORAGE_KEY);
     }
-    return Promise.reject(error);
+    const message =
+      error.response?.data?.message || error.message || "Request failed.";
+    return Promise.reject(new Error(message));
   },
 );
-

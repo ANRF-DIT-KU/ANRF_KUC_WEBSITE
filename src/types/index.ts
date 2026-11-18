@@ -54,7 +54,7 @@ export interface Announcement {
 
 export const GENERAL_PROJECT = "general";
 
-export type AccountRole = "pi" | "member";
+export type AccountRole = "admin" | "pi" | "member";
 
 export interface Project {
   id: string;

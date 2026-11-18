@@ -13,15 +13,15 @@ import { Button, Card, DashboardTitle, EmptyState, formatDateTime } from "../../
 type Filter = "all" | "unread" | "project" | "general";
 
 export const ContactQueries: React.FC = () => {
-  const { user } = useAuth();
+  const { activeProjectId, isAdmin } = useAuth();
   const queryClient = useQueryClient();
-  const pid = user!.projectId;
+  const pid = activeProjectId;
   const [filter, setFilter] = useState<Filter>("all");
   const [openId, setOpenId] = useState<string | null>(null);
 
   const { data: queries = [] } = useQuery({
-    queryKey: ["queries", pid],
-    queryFn: () => fetchContactQueriesApi(pid),
+    queryKey: ["queries", isAdmin ? "all" : pid],
+    queryFn: () => fetchContactQueriesApi(isAdmin ? undefined : pid),
   });
 
   const readMutation = useMutation({
@@ -102,7 +102,7 @@ export const ContactQueries: React.FC = () => {
           <ul className="divide-y divide-slate-200 -my-2">
             {visible.map((q) => {
               const open = openId === q.id;
-              const canDelete = q.projectId === pid;
+              const canDelete = isAdmin || q.projectId === pid;
               return (
                 <li key={q.id} className="py-3">
                   <button

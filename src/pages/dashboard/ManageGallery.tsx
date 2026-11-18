@@ -24,13 +24,13 @@ import {
 const MAX_FILES = 20;
 
 export const ManageGallery: React.FC = () => {
-  const { user } = useAuth();
+  const { user, activeProjectId, isAdmin } = useAuth();
   const queryClient = useQueryClient();
-  const pid = user!.projectId;
+  const pid = activeProjectId;
 
   const { data: mine = [] } = useQuery({
-    queryKey: ["gallery", pid],
-    queryFn: () => fetchGalleryApi(pid),
+    queryKey: ["gallery", isAdmin ? "all" : pid],
+    queryFn: () => fetchGalleryApi(isAdmin ? undefined : pid),
   });
 
   const [files, setFiles] = useState<File[]>([]);

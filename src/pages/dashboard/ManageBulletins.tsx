@@ -38,13 +38,13 @@ const emptyForm: Form = {
 };
 
 export const ManageBulletins: React.FC = () => {
-  const { user } = useAuth();
+  const { activeProjectId, isAdmin } = useAuth();
   const queryClient = useQueryClient();
-  const pid = user!.projectId;
+  const pid = activeProjectId;
 
   const { data: mine = [] } = useQuery({
-    queryKey: ["bulletins", pid],
-    queryFn: () => fetchBulletinsApi(pid),
+    queryKey: ["bulletins", isAdmin ? "all" : pid],
+    queryFn: () => fetchBulletinsApi(isAdmin ? undefined : pid),
   });
 
   const [editingId, setEditingId] = useState<string | null>(null);

@@ -132,6 +132,16 @@ export const LoginPage: React.FC = () => {
             Default demo accounts (password: <code className="font-mono">{DEFAULT_PASSWORD}</code>)
           </summary>
           <div className="mt-3 grid grid-cols-2 gap-2 font-mono text-[11px]">
+            <button
+              type="button"
+              onClick={() => {
+                setUsername("admin");
+                setPassword(DEFAULT_PASSWORD);
+              }}
+              className="col-span-2 text-left px-2.5 py-1.5 rounded bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 font-semibold"
+            >
+              admin (Main Super Admin)
+            </button>
             {projectsData.map((p) => (
               <React.Fragment key={p.id}>
                 <button

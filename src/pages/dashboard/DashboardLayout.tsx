@@ -9,18 +9,36 @@ import {
   LayoutDashboard,
   LogOut,
   Presentation,
+  Shield,
   Users,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
-import { fetchContactQueriesApi } from "../../api";
+import { fetchContactQueriesApi, fetchTeamsApi } from "../../api";
+import { projectsData } from "../../data/projectsData";
+import { GENERAL_PROJECT } from "../../types";
 
 export const DashboardLayout: React.FC = () => {
-  const { user, project, isPI, logout } = useAuth();
+  const {
+    user,
+    project,
+    activeProjectId,
+    setActiveProjectId,
+    isAdmin,
+    isPI,
+    logout,
+  } = useAuth();
   const navigate = useNavigate();
 
+  const { data: teams = [] } = useQuery({
+    queryKey: ["teams"],
+    queryFn: fetchTeamsApi,
+    enabled: isAdmin,
+  });
+
   const { data: queries = [] } = useQuery({
-    queryKey: ["queries", user?.projectId],
-    queryFn: () => fetchContactQueriesApi(user!.projectId),
+    queryKey: ["queries", activeProjectId],
+    queryFn: () =>
+      fetchContactQueriesApi(isAdmin ? activeProjectId : user!.projectId),
     enabled: !!user && isPI,
   });
 
@@ -47,6 +65,11 @@ export const DashboardLayout: React.FC = () => {
     navigate("/login", { replace: true });
   };
 
+  const projectOptions =
+    teams.length > 0
+      ? teams.map((t) => ({ id: t.projectId, label: `${t.pi.name} (${t.projectId})` }))
+      : projectsData.map((p) => ({ id: p.id, label: p.id }));
+
   return (
     <div className="bg-slate-50/60 min-h-[80vh]">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -54,15 +77,46 @@ export const DashboardLayout: React.FC = () => {
         <aside className="lg:col-span-3">
           <div className="bg-white border border-slate-200 rounded-lg shadow-xs overflow-hidden lg:sticky lg:top-24">
             <div className="bg-[#0b2344] text-white px-5 py-4">
-              <div className="text-[11px] font-bold uppercase tracking-wider text-amber-300">
-                {isPI ? "Project Investigator" : "Project Team"}
+              <div className="text-[11px] font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+                {isAdmin && <Shield size={13} />}
+                <span>
+                  {isAdmin
+                    ? "Super Administrator"
+                    : isPI
+                      ? "Project Investigator"
+                      : "Project Team"}
+                </span>
               </div>
               <div className="text-sm font-semibold mt-1 leading-snug line-clamp-3">
-                {project?.title}
+                {activeProjectId === GENERAL_PROJECT
+                  ? "General / Hub-Wide Content"
+                  : project?.title}
               </div>
               <div className="text-xs text-slate-300 mt-2">
                 Signed in as <span className="font-mono">{user?.username}</span>
               </div>
+
+              {isAdmin && (
+                <div className="mt-3 pt-3 border-t border-slate-700/80">
+                  <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-300 mb-1">
+                    Active Project Scope
+                  </label>
+                  <select
+                    value={activeProjectId}
+                    onChange={(e) => setActiveProjectId(e.target.value)}
+                    className="w-full px-2.5 py-1.5 text-xs rounded bg-slate-800 border border-slate-600 text-white focus:outline-hidden focus:border-amber-300"
+                  >
+                    {projectOptions.map((opt) => (
+                      <option key={opt.id} value={opt.id}>
+                        {opt.label}
+                      </option>
+                    ))}
+                    <option value={GENERAL_PROJECT}>
+                      general (Seed / Hub-wide)
+                    </option>
+                  </select>
+                </div>
+              )}
             </div>
             <nav className="p-2 flex lg:flex-col gap-1 overflow-x-auto">
               {links.map(({ to, label, icon: Icon, end, badge }) => (

@@ -1,7 +1,8 @@
-import React, { createContext, useCallback, useContext, useState } from "react";
+import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { TOKEN_STORAGE_KEY, USER_STORAGE_KEY } from "../api/client";
 import {
+  fetchMeApi,
   loginApi,
   updateCredentialsApi,
   UpdateCredentialsPayload,
@@ -10,6 +11,7 @@ import { AccountRole, AuthUser, Project } from "../types";
 import { projectsData } from "../data/projectsData";
 
 interface CredentialUpdateInput {
+  projectId?: string;
   target: AccountRole;
   currentPassword: string;
   newUsername?: string;
@@ -20,6 +22,9 @@ interface AuthContextValue {
   token: string | null;
   user: AuthUser | null;
   project: Project | null;
+  activeProjectId: string;
+  setActiveProjectId: (projectId: string) => void;
+  isAdmin: boolean;
   isPI: boolean;
   isAuthenticated: boolean;
   login: (username: string, password: string) => Promise<void>;
@@ -50,6 +55,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const queryClient = useQueryClient();
   const [token, setToken] = useState<string | null>(readInitialToken);
   const [user, setUser] = useState<AuthUser | null>(readInitialUser);
+  const [selectedProjectId, setSelectedProjectId] = useState<string>(
+    projectsData[0]?.id ?? "biotech",
+  );
 
   const persistAuth = useCallback((nextToken: string | null, nextUser: AuthUser | null) => {
     setToken(nextToken);
@@ -62,6 +70,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       localStorage.removeItem(USER_STORAGE_KEY);
     }
   }, []);
+
+  // Verify stored token with backend on startup
+  useEffect(() => {
+    if (!token) return;
+    fetchMeApi()
+      .then((freshUser) => {
+        persistAuth(token, freshUser);
+      })
+      .catch(() => {
+        persistAuth(null, null);
+      });
+  }, [token, persistAuth]);
 
   const login = useCallback(
     async (username: string, password: string) => {
@@ -77,12 +97,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     queryClient.clear();
   }, [persistAuth, queryClient]);
 
+  const isAdmin = !!user && user.role === "admin";
+  // Admin has all PI permissions as well
+  const isPI = !!user && (user.role === "pi" || user.role === "admin");
+
+  const activeProjectId = isAdmin
+    ? selectedProjectId
+    : (user?.projectId ?? projectsData[0]?.id ?? "biotech");
+
   const updateCredentials = useCallback(
-    async ({ target, currentPassword, newUsername, newPassword }: CredentialUpdateInput) => {
+    async ({
+      projectId,
+      target,
+      currentPassword,
+      newUsername,
+      newPassword,
+    }: CredentialUpdateInput) => {
       if (!user || !token) throw new Error("You are not logged in.");
 
+      const targetProjectId = projectId || (target === "admin" ? "admin" : activeProjectId);
+
       const payload: UpdateCredentialsPayload = {
-        projectId: user.projectId,
+        projectId: targetProjectId,
         actorRole: user.role,
         targetRole: target,
         currentPassword,
@@ -92,7 +128,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       const updatedAccount = await updateCredentialsApi(payload);
 
-      if (target === user.role) {
+      if (target === user.role && targetProjectId === user.projectId) {
         const updatedUser: AuthUser = {
           ...user,
           username: updatedAccount.username,
@@ -103,15 +139,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       await queryClient.invalidateQueries({
-        queryKey: ["project-accounts", user.projectId],
+        queryKey: ["project-accounts", targetProjectId],
       });
     },
-    [user, token, persistAuth, queryClient],
+    [user, token, activeProjectId, persistAuth, queryClient],
   );
 
-  const project = user
-    ? (projectsData.find((p) => p.id === user.projectId) ?? null)
-    : null;
+  const project =
+    projectsData.find((p) => p.id === activeProjectId) ?? null;
 
   return (
     <AuthContext.Provider
@@ -119,7 +154,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         token,
         user,
         project,
-        isPI: !!user && user.role === "pi",
+        activeProjectId,
+        setActiveProjectId: setSelectedProjectId,
+        isAdmin,
+        isPI,
         isAuthenticated: !!token && !!user,
         login,
         logout,

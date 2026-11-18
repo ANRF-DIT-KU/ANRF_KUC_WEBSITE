@@ -16,10 +16,11 @@ import {
 
 const CredentialsForm: React.FC<{
   target: AccountRole;
+  projectId: string;
   accountInfo?: ProjectAccountInfo;
-}> = ({ target, accountInfo }) => {
+}> = ({ target, projectId, accountInfo }) => {
   const { user, updateCredentials } = useAuth();
-  const isSelf = user!.role === target;
+  const isSelf = user!.role === target && user!.projectId === projectId;
 
   const [username, setUsername] = useState(accountInfo?.username ?? "");
   const [newPassword, setNewPassword] = useState("");
@@ -37,6 +38,13 @@ const CredentialsForm: React.FC<{
 
   if (!accountInfo) return null;
 
+  const title =
+    target === "admin"
+      ? "Main Admin account"
+      : target === "pi"
+        ? `PI account (${projectId})`
+        : `Team (member) account (${projectId})`;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -52,6 +60,7 @@ const CredentialsForm: React.FC<{
     setBusy(true);
     try {
       await updateCredentials({
+        projectId,
         target,
         currentPassword,
         newUsername: username,
@@ -69,7 +78,7 @@ const CredentialsForm: React.FC<{
   };
 
   return (
-    <Card title={target === "pi" ? "PI account" : "Team (member) account"}>
+    <Card title={title}>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
           {accountInfo.isDefaultPassword ? (
@@ -118,8 +127,14 @@ const CredentialsForm: React.FC<{
           </Field>
         </div>
         <Field
-          label={isSelf ? "Current password" : "Your (PI) password"}
-          hint={isSelf ? undefined : "Confirm your identity to change the team account."}
+          label={
+            isSelf
+              ? "Current password"
+              : user!.role === "admin"
+                ? "Your (Admin) password"
+                : "Your (PI) password"
+          }
+          hint={isSelf ? undefined : "Confirm your identity to update this account."}
         >
           <input
             type="password"
@@ -140,14 +155,21 @@ const CredentialsForm: React.FC<{
 };
 
 export const AccountSettings: React.FC = () => {
-  const { user, isPI } = useAuth();
-  const pid = user!.projectId;
+  const { activeProjectId, isAdmin, isPI } = useAuth();
+  const pid = activeProjectId === "general" ? "biotech" : activeProjectId;
+
+  const { data: adminAccounts = [] } = useQuery({
+    queryKey: ["project-accounts", "admin"],
+    queryFn: () => fetchProjectAccountsApi("admin"),
+    enabled: isAdmin,
+  });
 
   const { data: accounts = [] } = useQuery({
     queryKey: ["project-accounts", pid],
     queryFn: () => fetchProjectAccountsApi(pid),
   });
 
+  const adminAccount = adminAccounts.find((a) => a.role === "admin");
   const piAccount = accounts.find((a) => a.role === "pi");
   const memberAccount = accounts.find((a) => a.role === "member");
 
@@ -156,17 +178,26 @@ export const AccountSettings: React.FC = () => {
       <DashboardTitle
         title="Login Details"
         subtitle={
-          isPI
-            ? "Manage the username and password for your PI account and your project's shared team account."
-            : "Manage the username and password for your project's shared team account."
+          isAdmin
+            ? "Manage your Admin login details as well as the PI and Team accounts for the selected project."
+            : isPI
+              ? "Manage the username and password for your PI account and your project's shared team account."
+              : "Manage the username and password for your project's shared team account."
         }
       />
-      {isPI && <CredentialsForm target="pi" accountInfo={piAccount} />}
-      <CredentialsForm target="member" accountInfo={memberAccount} />
+      {isAdmin && (
+        <CredentialsForm
+          target="admin"
+          projectId="admin"
+          accountInfo={adminAccount}
+        />
+      )}
+      {isPI && <CredentialsForm target="pi" projectId={pid} accountInfo={piAccount} />}
+      <CredentialsForm target="member" projectId={pid} accountInfo={memberAccount} />
       {isPI && (
         <p className="text-xs text-slate-500">
-          After changing the team account details, share the new credentials with your project
-          members.
+          After changing a project's account details, share the new credentials with the respective
+          PI or project members.
         </p>
       )}
     </div>

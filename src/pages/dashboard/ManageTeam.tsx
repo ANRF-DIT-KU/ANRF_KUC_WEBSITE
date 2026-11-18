@@ -23,9 +23,9 @@ const move = <T,>(arr: T[], i: number, dir: -1 | 1): T[] => {
 };
 
 export const ManageTeam: React.FC = () => {
-  const { user } = useAuth();
+  const { activeProjectId } = useAuth();
   const queryClient = useQueryClient();
-  const pid = user!.projectId;
+  const pid = activeProjectId === "general" ? "biotech" : activeProjectId;
 
   const { data: saved } = useQuery({
     queryKey: ["team", pid],

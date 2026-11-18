@@ -10,37 +10,39 @@ import {
   fetchPresentationsApi,
   fetchProjectTeamApi,
 } from "../../api";
+import { GENERAL_PROJECT } from "../../types";
 import { Alert, DashboardTitle } from "../../components/dashboard/ui";
 
 export const DashboardHome: React.FC = () => {
-  const { user, isPI } = useAuth();
-  const pid = user!.projectId;
+  const { user, activeProjectId, isAdmin, isPI } = useAuth();
+  const pid = activeProjectId;
 
   const { data: team } = useQuery({
     queryKey: ["team", pid],
     queryFn: () => fetchProjectTeamApi(pid),
+    enabled: pid !== GENERAL_PROJECT,
   });
 
   const { data: bulletins = [] } = useQuery({
-    queryKey: ["bulletins", pid],
-    queryFn: () => fetchBulletinsApi(pid),
+    queryKey: ["bulletins", isAdmin ? "all" : pid],
+    queryFn: () => fetchBulletinsApi(isAdmin ? undefined : pid),
     enabled: isPI,
   });
 
   const { data: gallery = [] } = useQuery({
-    queryKey: ["gallery", pid],
-    queryFn: () => fetchGalleryApi(pid),
+    queryKey: ["gallery", isAdmin ? "all" : pid],
+    queryFn: () => fetchGalleryApi(isAdmin ? undefined : pid),
   });
 
   const { data: presentations = [] } = useQuery({
-    queryKey: ["presentations", pid],
-    queryFn: () => fetchPresentationsApi(pid),
+    queryKey: ["presentations", isAdmin ? "all" : pid],
+    queryFn: () => fetchPresentationsApi(isAdmin ? undefined : pid),
     enabled: isPI,
   });
 
   const { data: queries = [] } = useQuery({
-    queryKey: ["queries", pid],
-    queryFn: () => fetchContactQueriesApi(pid),
+    queryKey: ["queries", isAdmin ? "all" : pid],
+    queryFn: () => fetchContactQueriesApi(isAdmin ? undefined : pid),
     enabled: isPI,
   });
 
@@ -49,28 +51,28 @@ export const DashboardHome: React.FC = () => {
   const tiles = [
     {
       to: "/dashboard/bulletins",
-      label: "Bulletins",
+      label: isAdmin ? "All Bulletins" : "Bulletins",
       value: bulletins.length,
       icon: FileText,
       pi: true,
     },
     {
       to: "/dashboard/gallery",
-      label: "Gallery photos",
+      label: isAdmin ? "All Gallery photos" : "Gallery photos",
       value: gallery.length,
       icon: Image,
       pi: false,
     },
     {
       to: "/dashboard/presentations",
-      label: "Presentations",
+      label: isAdmin ? "All Presentations" : "Presentations",
       value: presentations.length,
       icon: Presentation,
       pi: true,
     },
     {
       to: "/dashboard/team",
-      label: "Team members",
+      label: "Team members (selected project)",
       value: team ? team.members.length + team.coInvestigators.length + 1 : 0,
       icon: Users,
       pi: true,
@@ -94,8 +96,18 @@ export const DashboardHome: React.FC = () => {
   return (
     <div className="space-y-6">
       <DashboardTitle
-        title={isPI ? `Welcome, ${team?.pi.name ?? "Investigator"}` : "Welcome, team"}
-        subtitle={team?.projectTitle}
+        title={
+          isAdmin
+            ? "Welcome, Administrator"
+            : isPI
+              ? `Welcome, ${team?.pi.name ?? "Investigator"}`
+              : "Welcome, team"
+        }
+        subtitle={
+          isAdmin
+            ? "Full administrative access across all ANRF-PAIR projects. Use the sidebar project selector to switch projects."
+            : team?.projectTitle
+        }
       />
 
       {user?.isDefaultPassword && (
