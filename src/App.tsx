@@ -14,7 +14,6 @@ import { NewsEventsPage } from "./pages/NewsEventsPage";
 import { DepartmentsPage } from "./pages/DepartmentsPage";
 import { PresentationsPage } from "./pages/PresentationsPage";
 import { DepartmentDetailPage } from "./pages/DepartmentDetailPage";
-import { BulletinsArchivePage } from "./pages/BulletinsArchivePage";
 import { GalleryPage } from "./pages/GalleryPage";
 import { LoginPage } from "./pages/LoginPage";
 
@@ -31,7 +30,7 @@ import { RequireAuth } from "./components/auth/RequireAuth";
 import { AuthProvider } from "./context/AuthContext";
 import { fetchBulletinsApi, fetchPresentationsApi } from "./api";
 
-import { mockSocialPosts, mockAnnouncements } from "./data/mockData";
+import { mockAnnouncements } from "./data/mockData";
 import { departmentsData } from "./data/departmentsData";
 
 const queryClient = new QueryClient({
@@ -46,7 +45,6 @@ const queryClient = new QueryClient({
 const AppRoutes: React.FC = () => {
   const announcements = mockAnnouncements.filled;
   const departments = departmentsData;
-  const socialPosts = mockSocialPosts.filled;
 
   const { data: bulletins = [] } = useQuery({
     queryKey: ["bulletins"],
@@ -72,7 +70,6 @@ const AppRoutes: React.FC = () => {
                 departments={departments}
                 bulletins={bulletins.slice(0, 3)}
                 presentations={presentations.slice(0, 3)}
-                socialPosts={socialPosts}
               />
             }
           />
@@ -91,17 +88,8 @@ const AppRoutes: React.FC = () => {
             element={<BulletinsPage bulletins={bulletins} />}
           />
           <Route
-            path="/bulletins/archive"
-            element={<BulletinsArchivePage />}
-          />
-          <Route
             path="/presentations"
-            element={
-              <PresentationsPage
-                presentations={presentations}
-                departments={departments}
-              />
-            }
+            element={<PresentationsPage presentations={presentations} />}
           />
           <Route path="/news-events" element={<NewsEventsPage />} />
           <Route path="/team" element={<TeamPage />} />

@@ -69,6 +69,13 @@ export const Footer: React.FC = () => {
                 Bulletins
               </Link>
               <span className="text-slate-600">·</span>
+              <Link
+                to="/presentations"
+                className="hover:text-amber-300 transition"
+              >
+                Presentations
+              </Link>
+              <span className="text-slate-600">·</span>
               <Link to="/team" className="hover:text-amber-300 transition">
                 Team
               </Link>

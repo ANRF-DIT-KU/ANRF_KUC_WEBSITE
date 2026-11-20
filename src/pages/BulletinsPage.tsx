@@ -1,10 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Bulletin } from '../types';
 import { PageContainer } from '../components/common/PageContainer';
 import { PageHeader } from '../components/common/PageHeader';
 import { BackLink } from '../components/common/BackLink';
-import { Download, ArrowRight } from 'lucide-react';
+import { Download } from 'lucide-react';
 
 interface BulletinsPageProps {
   bulletins: Bulletin[];
@@ -13,20 +12,9 @@ interface BulletinsPageProps {
 export const BulletinsPage: React.FC<BulletinsPageProps> = ({ bulletins }) => {
   return (
     <PageContainer>
-      <div className="flex justify-between items-center">
-        <BackLink to="/" label="Back to Home" className="mb-0" />
-        <Link
-          to="/bulletins/archive"
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0f766e] hover:text-[#0b2344] transition-colors"
-        >
-          <span>View Archive</span>
-          <ArrowRight size={16} />
-        </Link>
-      </div>
+      <BackLink to="/" label="Back to Home" />
 
-      <div className="mt-6">
-        <PageHeader title="Research Bulletins" />
-      </div>
+      <PageHeader title="Research Bulletins" />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {bulletins.map((bulletin, index) => {
@@ -55,7 +43,8 @@ export const BulletinsPage: React.FC<BulletinsPageProps> = ({ bulletins }) => {
                 <div className="pt-2">
                   <a
                     href={bulletin.downloadUrl}
-                    download={bulletin.fileName ?? true}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     onClick={(e) => {
                       // Seed bulletins have no PDF attached yet.
                       if (bulletin.downloadUrl !== '#') return;
@@ -76,4 +65,3 @@ export const BulletinsPage: React.FC<BulletinsPageProps> = ({ bulletins }) => {
     </PageContainer>
   );
 };
-
