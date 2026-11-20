@@ -30,7 +30,6 @@ import { RequireAuth } from "./components/auth/RequireAuth";
 import { AuthProvider } from "./context/AuthContext";
 import { fetchBulletinsApi, fetchPresentationsApi } from "./api";
 
-import { mockAnnouncements } from "./data/mockData";
 import { departmentsData } from "./data/departmentsData";
 
 const queryClient = new QueryClient({
@@ -43,7 +42,6 @@ const queryClient = new QueryClient({
 });
 
 const AppRoutes: React.FC = () => {
-  const announcements = mockAnnouncements.filled;
   const departments = departmentsData;
 
   const { data: bulletins = [] } = useQuery({
@@ -66,7 +64,6 @@ const AppRoutes: React.FC = () => {
             path="/"
             element={
               <HomePage
-                announcements={announcements}
                 departments={departments}
                 bulletins={bulletins.slice(0, 3)}
                 presentations={presentations.slice(0, 3)}
