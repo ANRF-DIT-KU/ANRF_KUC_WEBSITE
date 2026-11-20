@@ -18,7 +18,6 @@ export const TeamPage: React.FC = () => {
     <PageContainer>
       <BackLink to="/" label="Back to Home" />
 
-      {/* Header */}
       <PageHeader title="Our Team" />
 
       <div className="space-y-8">
@@ -34,35 +33,69 @@ export const TeamPage: React.FC = () => {
             </div>
 
             <div className="p-6">
-              {/* Investigator (PI / Lead) Card */}
-              <div className="mb-6 bg-teal-50/50 border border-teal-100 rounded-lg p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#0b2344] text-white flex items-center justify-center font-bold text-sm shrink-0">
-                    <UserCheck size={18} />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-slate-900 text-base">
-                        {group.pi.name}
-                      </span>
-                      <span
-                        className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${
-                          group.pi.role === "Principal Investigator"
-                            ? "bg-amber-100 text-amber-900 border border-amber-200"
-                            : "bg-teal-100 text-[#0f766e]"
-                        }`}
-                      >
-                        {group.pi.role}
-                      </span>
+              <div
+                className={`mb-6 grid grid-cols-1 ${
+                  group.uohPis && group.uohPis.length > 0
+                    ? "md:grid-cols-2"
+                    : ""
+                } gap-3`}
+              >
+                <div className="bg-teal-50/50 border border-teal-100 rounded-lg p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-[#0b2344] text-white flex items-center justify-center font-bold text-sm shrink-0">
+                      <UserCheck size={18} />
                     </div>
-                    <div className="text-xs text-slate-500">
-                      {group.pi.affiliation}
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="font-bold text-slate-900 text-base">
+                          {group.pi.name}
+                        </span>
+                        <span
+                          className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${
+                            group.pi.role === "Principal Investigator"
+                              ? "bg-amber-100 text-amber-900 border border-amber-200"
+                              : "bg-teal-100 text-[#0f766e]"
+                          }`}
+                        >
+                          {group.pi.role}
+                        </span>
+                      </div>
+                      <div className="text-xs text-slate-500">
+                        {group.pi.affiliation}
+                      </div>
                     </div>
                   </div>
                 </div>
+
+                {group.uohPis?.map((uohPi, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-slate-50 border border-slate-200 rounded-lg p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-[#0f766e] text-white flex items-center justify-center font-bold text-sm shrink-0">
+                        <UserCheck size={18} />
+                      </div>
+                      <div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="font-bold text-slate-900 text-base">
+                            {uohPi.name}
+                          </span>
+                          <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#0b2344]/10 text-[#0b2344] border border-[#0b2344]/20">
+                            {uohPi.role === "Principal Investigator"
+                              ? "Principal Investigator (UoH)"
+                              : "PI (UoH)"}
+                          </span>
+                        </div>
+                        <div className="text-xs text-slate-500">
+                          {uohPi.affiliation || "University of Hyderabad (Hub)"}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
 
-              {/* Co-Investigators (Co-PIs) if present */}
               {group.coInvestigators && group.coInvestigators.length > 0 && (
                 <div className="mb-6">
                   <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5">
@@ -70,24 +103,32 @@ export const TeamPage: React.FC = () => {
                     <span>Co-Investigators</span>
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-                    {group.coInvestigators.map((coPi, idx) => (
-                      <div
-                        key={idx}
-                        className="border border-slate-200 bg-slate-50/80 rounded-lg p-3 hover:bg-white hover:border-slate-300 transition flex items-center justify-between gap-2"
-                      >
-                        <div className="font-semibold text-slate-800 text-sm">
-                          {coPi.name}
+                    {group.coInvestigators.map((coPi, idx) => {
+                      const isUoH = coPi.institution === "UoH";
+                      return (
+                        <div
+                          key={idx}
+                          className="border border-slate-200 bg-slate-50/80 rounded-lg p-3 hover:bg-white hover:border-slate-300 transition flex items-center justify-between gap-2"
+                        >
+                          <div className="font-semibold text-slate-800 text-sm">
+                            {coPi.name}
+                          </div>
+                          <span
+                            className={`text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap ${
+                              isUoH
+                                ? "bg-[#0b2344]/10 text-[#0b2344] border border-[#0b2344]/20"
+                                : "bg-slate-200 text-slate-700"
+                            }`}
+                          >
+                            {isUoH ? "Co-PI (UoH)" : "Co-PI"}
+                          </span>
                         </div>
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 whitespace-nowrap">
-                          Co-PI
-                        </span>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               )}
 
-              {/* Project Members / Staff */}
               <div>
                 <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5">
                   <Users size={14} />

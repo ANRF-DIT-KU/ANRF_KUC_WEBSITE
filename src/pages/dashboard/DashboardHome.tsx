@@ -73,7 +73,12 @@ export const DashboardHome: React.FC = () => {
     {
       to: "/dashboard/team",
       label: "Team members (selected project)",
-      value: team ? team.members.length + team.coInvestigators.length + 1 : 0,
+      value: team
+        ? team.members.length +
+          team.coInvestigators.length +
+          (team.uohPis?.length ?? 0) +
+          1
+        : 0,
       icon: Users,
       pi: true,
     },

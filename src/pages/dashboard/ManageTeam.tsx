@@ -63,10 +63,24 @@ export const ManageTeam: React.FC = () => {
       members: draft.members.map((m, idx) => (idx === i ? { ...m, ...patch } : m)),
     });
 
-  const setCoPi = (i: number, name: string) =>
+  const setUohPi = (
+    i: number,
+    patch: Partial<NonNullable<ProjectTeam["uohPis"]>[number]>,
+  ) =>
     setDraft({
       ...draft,
-      coInvestigators: draft.coInvestigators.map((c, idx) => (idx === i ? { name } : c)),
+      uohPis: (draft.uohPis ?? []).map((p, idx) => (idx === i ? { ...p, ...patch } : p)),
+    });
+
+  const setCoPi = (
+    i: number,
+    patch: Partial<ProjectTeam["coInvestigators"][number]>,
+  ) =>
+    setDraft({
+      ...draft,
+      coInvestigators: draft.coInvestigators.map((c, idx) =>
+        idx === i ? { ...c, ...patch } : c,
+      ),
     });
 
   const handleSave = (e: React.FormEvent) => {
@@ -130,32 +144,138 @@ export const ManageTeam: React.FC = () => {
       </Card>
 
       <Card
-        title={`Co-Investigators (${draft.coInvestigators.length})`}
+        title={`University of Hyderabad (UoH) PIs (${(draft.uohPis ?? []).length})`}
         actions={
           <Button
             type="button"
             size="sm"
             variant="secondary"
             onClick={() =>
-              setDraft({ ...draft, coInvestigators: [...draft.coInvestigators, { name: "" }] })
+              setDraft({
+                ...draft,
+                uohPis: [
+                  ...(draft.uohPis ?? []),
+                  {
+                    name: "",
+                    role: "Project Investigator",
+                    affiliation: "University of Hyderabad (Hub)",
+                  },
+                ],
+              })
             }
           >
-            <Plus size={14} /> Add Co-PI
+            <Plus size={14} /> Add PI (UoH)
           </Button>
+        }
+      >
+        {(draft.uohPis ?? []).length === 0 ? (
+          <EmptyState>No University of Hyderabad PIs listed.</EmptyState>
+        ) : (
+          <div className="space-y-3">
+            {(draft.uohPis ?? []).map((p, i) => (
+              <div
+                key={i}
+                className="grid grid-cols-1 md:grid-cols-12 gap-2 items-center border border-slate-200 rounded-md p-3 bg-slate-50/60"
+              >
+                <input
+                  required
+                  value={p.name}
+                  onChange={(e) => setUohPi(i, { name: e.target.value })}
+                  placeholder="Prof. / Dr. Name"
+                  className={`${inputCls} md:col-span-4`}
+                />
+                <select
+                  value={p.role}
+                  onChange={(e) => setUohPi(i, { role: e.target.value })}
+                  className={`${inputCls} md:col-span-3`}
+                >
+                  <option>Project Investigator</option>
+                  <option>Principal Investigator</option>
+                </select>
+                <input
+                  value={p.affiliation}
+                  onChange={(e) => setUohPi(i, { affiliation: e.target.value })}
+                  placeholder="University of Hyderabad (Hub)"
+                  className={`${inputCls} md:col-span-4`}
+                />
+                <div className="flex md:col-span-1 md:justify-end">
+                  <Button
+                    type="button"
+                    variant="danger"
+                    size="sm"
+                    aria-label="Remove UoH PI"
+                    onClick={() =>
+                      setDraft({
+                        ...draft,
+                        uohPis: (draft.uohPis ?? []).filter((_, idx) => idx !== i),
+                      })
+                    }
+                  >
+                    <Trash2 size={13} />
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </Card>
+
+      <Card
+        title={`Co-Investigators (${draft.coInvestigators.length})`}
+        actions={
+          <div className="flex flex-wrap gap-2">
+            <Button
+              type="button"
+              size="sm"
+              variant="secondary"
+              onClick={() =>
+                setDraft({
+                  ...draft,
+                  coInvestigators: [...draft.coInvestigators, { name: "", institution: "KU" }],
+                })
+              }
+            >
+              <Plus size={14} /> Add Co-PI
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="secondary"
+              onClick={() =>
+                setDraft({
+                  ...draft,
+                  coInvestigators: [...draft.coInvestigators, { name: "", institution: "UoH" }],
+                })
+              }
+            >
+              <Plus size={14} /> Add Co-PI (UoH)
+            </Button>
+          </div>
         }
       >
         {draft.coInvestigators.length === 0 ? (
           <EmptyState>No co-investigators listed.</EmptyState>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {draft.coInvestigators.map((c, i) => (
               <div key={i} className="flex gap-2">
                 <input
                   value={c.name}
-                  onChange={(e) => setCoPi(i, e.target.value)}
+                  onChange={(e) => setCoPi(i, { name: e.target.value })}
                   placeholder="Dr. Name"
                   className={inputCls}
                 />
+                <select
+                  value={c.institution === "UoH" ? "UoH" : "KU"}
+                  onChange={(e) =>
+                    setCoPi(i, { institution: e.target.value as "KU" | "UoH" })
+                  }
+                  aria-label="Co-PI institution"
+                  className="px-2.5 py-2 text-xs font-semibold border border-slate-300 rounded-md bg-white text-slate-700 focus:ring-2 focus:ring-[#0b2344] focus:outline-hidden shrink-0"
+                >
+                  <option value="KU">KU</option>
+                  <option value="UoH">UoH</option>
+                </select>
                 <Button
                   type="button"
                   variant="danger"

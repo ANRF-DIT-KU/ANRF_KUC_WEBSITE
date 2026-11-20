@@ -103,7 +103,8 @@ export interface ProjectTeam {
   displayOrder?: number;
   projectTitle: string;
   pi: { name: string; role: string; affiliation: string };
-  coInvestigators: { name: string }[];
+  uohPis?: { name: string; role: string; affiliation: string }[];
+  coInvestigators: { name: string; institution?: "KU" | "UoH" }[];
   members: { name: string; role: string; email: string }[];
 }
 
