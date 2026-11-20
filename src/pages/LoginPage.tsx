@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Lock, LogIn, User } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import { DEFAULT_PASSWORD, projectsData } from "../data/projectsData";
 import { Alert, Button, Field, inputCls } from "../components/dashboard/ui";
 import anrfLogo from "../assets/logo/anrf_logo.png";
 import uohLogo from "../assets/logo/uoh_logo.png";
@@ -12,7 +11,8 @@ export const LoginPage: React.FC = () => {
   const { isAuthenticated, login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = (location.state as { from?: string } | null)?.from ?? "/dashboard";
+  const from =
+    (location.state as { from?: string } | null)?.from ?? "/dashboard";
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -61,7 +61,8 @@ export const LoginPage: React.FC = () => {
             Project Portal Login
           </h1>
           <p className="mt-2 text-sm text-slate-500">
-            For Project Investigators and project team members of ANRF-PAIR, Kannur University.
+            For Project Investigators and project team members of ANRF-PAIR,
+            Kannur University.
           </p>
         </div>
 
@@ -84,7 +85,7 @@ export const LoginPage: React.FC = () => {
                 autoFocus
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="e.g. chemistry-pi"
+                placeholder="Enter your username"
                 className={`${inputCls} pl-9`}
               />
             </div>
@@ -119,55 +120,7 @@ export const LoginPage: React.FC = () => {
             <LogIn size={16} />
             <span>{busy ? "Signing in…" : "Sign in"}</span>
           </Button>
-
-          <p className="text-xs text-slate-500 text-center leading-relaxed">
-            Each project has one <strong>PI account</strong> and one shared{" "}
-            <strong>team account</strong>. Forgot your credentials? Members should contact their
-            PI; PIs should contact the ANRF-PAIR office.
-          </p>
         </form>
-
-        <details className="bg-white border border-slate-200 rounded-lg p-4 text-xs text-slate-600 shadow-2xs">
-          <summary className="font-semibold text-[#0b2344] cursor-pointer select-none">
-            Default demo accounts (password: <code className="font-mono">{DEFAULT_PASSWORD}</code>)
-          </summary>
-          <div className="mt-3 grid grid-cols-2 gap-2 font-mono text-[11px]">
-            <button
-              type="button"
-              onClick={() => {
-                setUsername("admin");
-                setPassword(DEFAULT_PASSWORD);
-              }}
-              className="col-span-2 text-left px-2.5 py-1.5 rounded bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 font-semibold"
-            >
-              admin (Main Super Admin)
-            </button>
-            {projectsData.map((p) => (
-              <React.Fragment key={p.id}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setUsername(`${p.id}-pi`);
-                    setPassword(DEFAULT_PASSWORD);
-                  }}
-                  className="text-left px-2 py-1 rounded bg-slate-50 hover:bg-teal-50 border border-slate-200 text-slate-700"
-                >
-                  {p.id}-pi (PI)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setUsername(`${p.id}-team`);
-                    setPassword(DEFAULT_PASSWORD);
-                  }}
-                  className="text-left px-2 py-1 rounded bg-slate-50 hover:bg-teal-50 border border-slate-200 text-slate-700"
-                >
-                  {p.id}-team (Member)
-                </button>
-              </React.Fragment>
-            ))}
-          </div>
-        </details>
       </div>
     </div>
   );
